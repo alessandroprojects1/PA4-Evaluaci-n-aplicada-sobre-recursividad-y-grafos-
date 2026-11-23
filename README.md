@@ -221,7 +221,112 @@ El enfoque recursivo con **Merge Sort** es idóneo para ordenar las distancias d
 - **Claridad estructural mediante Divide y Vencerás:** descomponer recursivamente un arreglo desordenado hasta casos triviales de un elemento (`left == right`) simplifica el problema: el ordenamiento real recae únicamente en intercalar dos listas que ya están ordenadas (`merge`).
 
 --------------------------------------------------------------------------------------------------------------
-## Actividad 3. Grafos
+## Actividad 3. Modelado del problema mediante grafos
+
+📁 Código: carpeta [`Actividad 3`](./Actividad%203) — clase `Grafo.java` (paquete `pe.edu.isil`)
+
+### 3.1 Representación del campus como grafo
+
+El campus se modeló como un grafo **no dirigido y ponderado**:
+
+- **Nodos:** 0 Puerta Principal, 1 Biblioteca, 2 Cafetería, 3 Laboratorio de Cómputo, 4 Patio Central, 5 Auditorio.
+- **Aristas:** los pasillos o caminos que unen dos ubicaciones.
+- **Sentido:** no dirigido, porque cada pasillo se puede recorrer en ambos sentidos.
+- **Peso:** distancia en metros de cada camino.
+
+| Arista | Distancia |
+|---|---|
+| Puerta – Biblioteca | 50 m |
+| Puerta – Cafetería | 70 m |
+| Biblioteca – Laboratorio | 40 m |
+| Cafetería – Laboratorio | 30 m |
+| Cafetería – Patio | 60 m |
+| Laboratorio – Auditorio | 80 m |
+| Patio – Auditorio | 35 m |
+
+Se eligió la **lista de adyacencia** (`LinkedList<Integer>[]`) en lugar de la matriz de adyacencia. El grafo tiene 6 nodos y solo 7 aristas, así que es disperso. La lista ocupa espacio O(V + E) y guarda solo las conexiones que existen, mientras que la matriz ocupa O(V²).
+
+```
+Lista de adyacencia del campus:
+0 Puerta -> Biblioteca Cafeteria
+1 Biblioteca -> Puerta Laboratorio
+2 Cafeteria -> Puerta Laboratorio Patio
+3 Laboratorio -> Biblioteca Cafeteria Auditorio
+4 Patio -> Cafeteria Auditorio
+5 Auditorio -> Laboratorio Patio
+```
+
+### 3.2 Situación en la que conviene usar DFS
+
+**Situación:** antes de poner en marcha el módulo, verificar que **todas las ubicaciones del campus estén conectadas** y que ninguna zona quede aislada (por ejemplo, por un pasillo en obras).
+
+La búsqueda en profundidad (DFS) avanza por un camino hasta el nodo más profundo y luego retrocede (backtracking) para explorar las demás ramas. Se implementó de forma **recursiva**, como en la sesión 13:
+
+- **Caso recursivo:** si un vecino no ha sido visitado, se llama a `DFS` con ese vecino.
+- **Caso base:** cuando un nodo ya no tiene vecinos sin visitar, la llamada termina y regresa al nodo anterior.
+- Si al final todos los nodos quedaron visitados, el campus está conectado.
+
+DFS conviene aquí porque solo se necesita saber si se llega a todos los nodos, no cuál es la ruta más corta. Usa poca memoria (la pila de llamadas recursivas) y su complejidad es O(V + E).
+
+```
+Recorrido DFS desde Puerta: Puerta Biblioteca Laboratorio Cafeteria Patio Auditorio
+Todas las ubicaciones estan conectadas? true
+```
+
+### 3.3 Situación en la que conviene usar BFS
+
+**Situación:** un visitante está en la **Puerta** y quiere llegar al **Auditorio** pasando por la **menor cantidad de lugares posible**.
+
+La búsqueda en anchura (BFS) recorre el grafo **por niveles** usando una **cola** (FIFO). Primero visita los vecinos directos del origen, luego los vecinos de esos vecinos, y así sucesivamente. Por eso la primera vez que llega al destino lo hace con el **mínimo número de tramos**. Para reconstruir la ruta se guarda en un arreglo `padre[]` desde qué nodo se llegó a cada uno.
+
+| Nivel | Ubicaciones |
+|---|---|
+| 0 | Puerta |
+| 1 | Biblioteca, Cafetería |
+| 2 | Laboratorio, Patio |
+| 3 | Auditorio |
+
+```
+Recorrido BFS desde Puerta: Puerta Biblioteca Cafeteria Laboratorio Patio Auditorio
+Ruta con menos tramos de Puerta a Auditorio: Puerta -> Biblioteca -> Laboratorio -> Auditorio  (3 tramos)
+```
+
+La ruta tiene 3 tramos. Su limitación es que **BFS no considera los metros**: mide 50 + 40 + 80 = **170 m**, y no es la más corta en distancia.
+
+### 3.4 Aporte del algoritmo heurístico A*
+
+A* es una búsqueda **informada**: en cada paso elige el nodo con menor valor de
+
+**f(n) = g(n) + h(n)**
+
+- **g(n):** costo real acumulado desde el origen (metros recorridos).
+- **h(n):** heurística, una estimación de lo que falta para llegar a la meta (por ejemplo, la distancia en línea recta).
+
+Si la heurística es **admisible** (nunca sobreestima la distancia real), A* garantiza el camino óptimo. Estimaciones usadas hasta el Auditorio: Puerta 150, Biblioteca 118, Cafetería 85, Laboratorio 70, Patio 30, Auditorio 0.
+
+**Ejecución de A\* de Puerta a Auditorio:**
+
+| Paso | Nodo expandido | g | h | f = g + h | Vecinos que agrega |
+|---|---|---|---|---|---|
+| 1 | Puerta | 0 | 150 | 150 | Biblioteca (f = 168), Cafetería (f = 155) |
+| 2 | Cafetería | 70 | 85 | 155 | Laboratorio (f = 170), Patio (f = 160) |
+| 3 | Patio | 130 | 30 | 160 | Auditorio (f = 165) |
+| 4 | Auditorio | 165 | 0 | 165 | Meta alcanzada |
+
+**Resultado:** Puerta → Cafetería → Patio → Auditorio, con **165 m**.
+
+| Algoritmo | Ruta | Tramos | Distancia | Criterio |
+|---|---|---|---|---|
+| BFS | Puerta → Biblioteca → Laboratorio → Auditorio | 3 | 170 m | Menos tramos |
+| A* | Puerta → Cafetería → Patio → Auditorio | 3 | **165 m** | Menor distancia, guiado por heurística |
+
+A* aporta **dirección hacia la meta**: gracias a la heurística nunca expandió la Biblioteca ni el Laboratorio, porque estimó que por ahí la ruta salía más larga. Así encontró el camino más corto en metros explorando menos nodos. Es el mismo principio que usa Google Maps para calcular rutas.
+
+### Cómo ejecutar
+
+1. Abrir la carpeta `Actividad 3` en IntelliJ IDEA.
+2. Ejecutar el `main` de `Grafo.java`.
+3. La consola muestra la lista de adyacencia, el recorrido DFS, el recorrido BFS y la ruta con menos tramos.
 
 --------------------------------------------------------------------------------------------------------------
 ## Actividad 4. Recorridos y conclusión
