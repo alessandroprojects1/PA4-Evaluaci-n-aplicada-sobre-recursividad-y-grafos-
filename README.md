@@ -141,7 +141,7 @@ public class Actividad1 {
 
     public static void main(String[] args) {
 
-        // Resultado ordenado de la Actividad 2 (Merge Sort)
+        
         String[] ubicaciones = {"Biblioteca", "Cafetería", "Laboratorio", "Patio", "Auditorio"};
         int[] distancias = {50, 70, 90, 130, 165};
 
