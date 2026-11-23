@@ -60,8 +60,118 @@ Arreglo final ordenado (de menor a mayor distancia desde la Puerta):
 4. La consola mostrará el arreglo original de distancias desde la Puerta y el arreglo ordenado mediante Merge Sort junto con sus ubicaciones.
 
 --------------------------------------------------------------------------------------------------------------
-## Actividad 1. Recursividad
 
+## Actividad 1. Recursividad aplicada (Búsqueda Binaria Recursiva)
+
+### a. ¿Qué es la recursividad y cómo se relaciona con Divide y Vencerás?
+
+La **recursividad** es una técnica en la que una función se llama a sí misma para resolver una versión más pequeña del mismo problema, hasta llegar a un **caso base** que se resuelve directamente.
+
+Se relaciona con la estrategia **divide y vencerás** porque cada llamada recursiva divide el problema en una parte menor del mismo tipo. En el caso del campus académico, se utiliza una **búsqueda binaria recursiva** para encontrar qué ubicación se encuentra a una distancia dada desde la Puerta. Trabaja sobre el arreglo ya ordenado por el Merge Sort de la Actividad 2: `{50, 70, 90, 130, 165}`, correspondientes a `(Biblioteca, Cafetería, Laboratorio, Patio, Auditorio)`.
+
+El algoritmo opera mediante el método `buscar`, que recibe el arreglo, el valor objetivo y los límites `inicio` y `fin`:
+
+- **Dividir:** se calcula el punto medio `medio = (inicio + fin) / 2` y se compara `distancias[medio]` con el objetivo.
+- **Conquistar:** se descarta la mitad donde el valor no puede estar y se invoca recursivamente `buscar` sobre la otra mitad.
+- **Combinar:** no hace falta. La respuesta de la llamada más interna es la respuesta final.
+
+### Caso base, caso recursivo y condición de finalización
+
+- **Caso base 1 (`inicio > fin`):** el rango quedó vacío, el valor no existe y retorna `-1`.
+- **Caso base 2 (`distancias[medio] == objetivo`):** se encontró el valor y retorna su posición.
+- **Caso recursivo:** si el objetivo es menor que `distancias[medio]`, se llama a `buscar` con la mitad izquierda (`inicio..medio-1`). Si es mayor, con la mitad derecha (`medio+1..fin`).
+- **Condición de finalización:** en cada llamada el rango se reduce a la mitad y excluye la posición `medio`, por lo que siempre se llega a uno de los dos casos base y la recursión no puede ser infinita.
+
+### Representación paso a paso (árbol de llamadas)
+
+**Buscar 130 m** en `{50, 70, 90, 130, 165}`:
+
+```text
+buscar(inicio=0, fin=4)  → medio=2, valor 90
+        130 > 90 → se descarta la mitad izquierda
+              │
+              ▼
+buscar(inicio=3, fin=4)  → medio=3, valor 130
+        130 == 130 → caso base 2
+              │
+              ▼
+        retorna 3  →  Patio
+```
+
+**Buscar 100 m** (valor inexistente):
+
+```text
+buscar(inicio=0, fin=4)  → medio=2, valor 90
+        100 > 90 → mitad derecha
+              │
+              ▼
+buscar(inicio=3, fin=4)  → medio=3, valor 130
+        100 < 130 → mitad izquierda
+              │
+              ▼
+buscar(inicio=3, fin=2)  → inicio > fin → caso base 1
+              │
+              ▼
+        retorna -1  →  No hay ubicación a esa distancia
+```
+
+### b. Implementación en Java (`buscar`)
+
+La implementación completa se encuentra en la carpeta `Actividad1` (`Actividad1.java`):
+
+```java
+package actividad1;
+
+public class Actividad1 {
+
+    // Método recursivo buscar (búsqueda binaria)
+    static int buscar(int[] distancias, int objetivo, int inicio, int fin) {
+        if (inicio > fin) {
+            return -1;                       // caso base 1: el valor no existe
+        }
+        int medio = (inicio + fin) / 2;
+        if (distancias[medio] == objetivo) {
+            return medio;                    // caso base 2: valor encontrado
+        }
+        if (objetivo < distancias[medio]) {
+            return buscar(distancias, objetivo, inicio, medio - 1);  // caso recursivo: mitad izquierda
+        }
+        return buscar(distancias, objetivo, medio + 1, fin);         // caso recursivo: mitad derecha
+    }
+
+    public static void main(String[] args) {
+
+        // Resultado ordenado de la Actividad 2 (Merge Sort)
+        String[] ubicaciones = {"Biblioteca", "Cafetería", "Laboratorio", "Patio", "Auditorio"};
+        int[] distancias = {50, 70, 90, 130, 165};
+
+        int[] consultas = {130, 100};
+        for (int d : consultas) {
+            int pos = buscar(distancias, d, 0, distancias.length - 1);
+            if (pos != -1) {
+                System.out.println(d + " m -> " + ubicaciones[pos]);
+            } else {
+                System.out.println(d + " m -> No hay ubicación a esa distancia");
+            }
+        }
+    }
+}
+```
+
+**Salida en consola:**
+
+```text
+130 m -> Patio
+100 m -> No hay ubicación a esa distancia
+```
+
+### c. ¿Por qué sirve el enfoque recursivo en este caso?
+
+El enfoque recursivo con **búsqueda binaria** es idóneo para consultar las distancias de las ubicaciones del campus por tres razones:
+
+- **Complejidad temporal $O(\log n)$:** en cada llamada el rango se reduce a la mitad, por lo que se necesitan como máximo $\log_2(n)$ comparaciones, frente a las $n$ de una búsqueda lineal $O(n)$. Esto importa cuando crece el número de ubicaciones del campus.
+
+- **Claridad estructural mediante Divide y Vencerás:** el problema se reduce a decidir en cada paso si el valor está a la izquierda o a la derecha del punto medio, y la definición recursiva refleja exactamente esa idea.
 --------------------------------------------------------------------------------------------------------------
 ## Actividad 2. Ordenamiento recursivo (Merge Sort)
 
