@@ -439,4 +439,52 @@ A* aporta **dirección hacia la meta**: gracias a la heurística nunca expandió
 3. La consola muestra la lista de adyacencia, el recorrido DFS, el recorrido BFS y la ruta con menos tramos.
 
 --------------------------------------------------------------------------------------------------------------
+
 ## Actividad 4. Recorridos y conclusión
+
+### 4.1 Comparación de algoritmos de búsqueda (Persona 1)
+
+**a. Comparación de DFS, BFS y A***
+
+**b. Ventajas y desventajas de cada algoritmo**
+
+**c. ¿Cuál de los tres algoritmos sería mejor implementar en nuestro módulo y por qué?**
+
+---
+
+### 4.2 Relación con la Inteligencia Artificial (Persona 2)
+
+**a. Relación del algoritmo A* con la Inteligencia Artificial**
+
+El algoritmo A* se relaciona con la Inteligencia Artificial porque ayuda a encontrar rutas más cortas y eficientes para llegar a un destino. Para hacerlo, toma en cuenta la distancia recorrida y una estimación de lo que falta para llegar.
+
+En nuestro proyecto, lo utilizamos para encontrar la ruta más corta desde la Puerta Principal hasta el Auditorio del campus.
+
+**b. Aplicaciones en la vida real**
+
+La Inteligencia Artificial y los algoritmos también se utilizan en diferentes aplicaciones que usamos diariamente:
+
+- **Google Maps:** utiliza algoritmos de búsqueda para encontrar rutas y ayudarnos a llegar a nuestro destino.
+- **Redes sociales:** utilizan algoritmos para encontrar conexiones entre personas y sugerir nuevos amigos.
+- **Sistemas recomendadores:** analizan nuestros gustos e intereses para recomendarnos películas, música, productos y otros contenidos.
+
+**c. Importancia en nuestro proyecto**
+
+Estos algoritmos son importantes porque nos ayudan a encontrar mejores formas de llegar a diferentes lugares del campus.
+
+Por ejemplo, al utilizar A*, encontramos que la ruta más corta desde la Puerta Principal hasta el Auditorio es pasando por la Cafetería y el Patio.
+
+**Ruta obtenida con A*:**
+
+```text
+Puerta → Cafetería → Patio → Auditorio
+
+Distancia total: 165 metros
+```
+
+**d. Conclusión**
+
+En conclusión, los algoritmos de búsqueda son útiles porque nos permiten resolver problemas de manera más sencilla y encontrar mejores soluciones. También podemos ver su importancia en aplicaciones que usamos diariamente, como Google Maps y las redes sociales.
+
+En nuestro proyecto, A* nos ayudó a encontrar la ruta más corta dentro del campus, demostrando cómo estos algoritmos pueden aplicarse en situaciones de la vida real.
+
