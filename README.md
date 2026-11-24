@@ -442,17 +442,101 @@ A* aporta **dirección hacia la meta**: gracias a la heurística nunca expandió
 
 ## Actividad 4. Recorridos y conclusión
 
-### 4.1 Comparación de algoritmos de búsqueda (Persona 1)
+### 4.1 Comparación de algoritmos de búsqueda 
 
-**a. Comparación de DFS, BFS y A***
 
-**b. Ventajas y desventajas de cada algoritmo**
+# Algoritmos de búsqueda: DFS, BFS y A*
 
-**c. ¿Cuál de los tres algoritmos sería mejor implementar en nuestro módulo y por qué?**
+## 1. ¿Qué son DFS, BFS y A*?
+
+Son algoritmos fundamentales de búsqueda y recorrido de grafos, utilizados para encontrar caminos, explorar estructuras de datos y resolver problemas de navegación.
+
+### DFS (Depth-First Search) - Búsqueda en profundidad
+
+Explora un camino hasta el final (lo más profundo posible) antes de retroceder y probar otra rama.
+
+Funciona como recorrer un laberinto siguiendo un camino hasta encontrar un callejón sin salida; luego se retrocede para explorar otras alternativas.
+
+### BFS (Breadth-First Search) - Búsqueda en anchura
+
+Explora el grafo por niveles o capas, revisando primero todos los nodos vecinos más cercanos al punto de partida antes de avanzar al siguiente nivel.
+
+Es especialmente útil para encontrar el camino más corto en grafos sin pesos o con pesos uniformes.
+
+### A* (A-Star) - Búsqueda informada
+
+Es un algoritmo de búsqueda informada que utiliza una función heurística (estimación de la distancia al objetivo) combinada con el costo real del recorrido para orientar la búsqueda hacia la meta.
+
+Su función de evaluación es:
+
+`f(n) = g(n) + h(n)`
+
+Donde:
+
+- `g(n)`: costo real desde el nodo inicial hasta el nodo actual.
+- `h(n)`: costo estimado desde el nodo actual hasta el objetivo.
+- `f(n)`: costo total estimado de la ruta.
 
 ---
 
-### 4.2 Relación con la Inteligencia Artificial (Persona 2)
+## 2. Comparación: características, ventajas y desventajas
+
+| Algoritmo | Tipo de búsqueda | Ventajas principales | Desventajas principales |
+|---|---|---|---|
+| **DFS** | No informada (Pila / LIFO) | Consume poca memoria y puede encontrar rápidamente una solución si está en la rama correcta. | No garantiza el camino más corto y puede quedarse atrapado en ciclos o ramas infinitas. |
+| **BFS** | No informada (Cola / FIFO) | Garantiza encontrar el camino más corto en grafos sin pesos o con pesos iguales. | Consume mucha memoria porque almacena los nodos de cada nivel antes de avanzar. |
+| **A*** | Informada / Heurística (Cola de prioridad) | Puede encontrar rutas óptimas y reducir los nodos explorados respecto a BFS. | Su rendimiento depende de la calidad de la heurística y requiere más cálculos por nodo. |
+
+---
+
+## 3. Recomendación para implementar en el módulo
+
+Si el módulo está relacionado con:
+
+- Rutas y caminos.
+- Mapas y navegación.
+- Videojuegos.
+- Sistemas de posicionamiento.
+- Inteligencia artificial.
+
+### Algoritmo recomendado: A*
+
+Se recomienda implementar el algoritmo A* debido a que permite encontrar rutas eficientes utilizando heurísticas que orientan la búsqueda hacia el objetivo.
+
+### Justificación para la exposición
+
+> Recomiendo implementar A* porque, a diferencia de DFS y BFS, que no utilizan información heurística para orientar la búsqueda, A* combina el costo real del recorrido con una estimación de la distancia hasta el objetivo.
+>
+> Esto permite encontrar rutas óptimas cuando se utiliza una heurística admisible y se cumplen las condiciones necesarias, reduciendo los nodos explorados y mejorando el tiempo de respuesta. Por ello, es una alternativa adecuada para desarrollar un módulo eficiente y escalable.
+
+---
+
+## 4. Conclusión y transición a la siguiente exposición
+
+A* destaca por su capacidad de tomar decisiones inteligentes durante la búsqueda de rutas, utilizando información heurística para orientar el recorrido hacia el objetivo.
+
+> Dado que A* es un algoritmo eficiente para tomar decisiones inteligentes de ruta, mi compañera les explicará ahora cómo este algoritmo se conecta directamente con la Inteligencia Artificial y sus aplicaciones en escenarios reales.
+
+---
+
+## 5. Resumen
+
+| Característica | DFS | BFS | A* |
+|---|---|---|---|
+| Búsqueda | Profundidad | Niveles | Heurística |
+| Estructura | Pila | Cola | Cola de prioridad |
+| Usa heurística | No | No | Sí |
+| Encuentra camino más corto | No garantiza | Sí, sin pesos | Sí, bajo condiciones adecuadas |
+| Aplicación | Exploración de grafos | Búsqueda por niveles | Navegación y planificación de rutas |
+
+---
+
+**Recomendación final:** Para módulos de navegación, mapas y videojuegos, A* es una excelente opción por su capacidad de combinar el costo real y la estimación del costo restante para encontrar rutas eficientes.
+
+
+---
+
+### 4.2 Relación con la Inteligencia Artificial 
 
 **a. Relación del algoritmo A* con la Inteligencia Artificial**
 
